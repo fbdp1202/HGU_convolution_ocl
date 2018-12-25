@@ -9,6 +9,11 @@ typedef struct layer{
 	int c;
 	int w;
 	int h;
+	int out_w;
+	int out_h;
+	int stride;
+	int pad;
+	int size;
 	float *weights;
 	float *outputs;
 }layer;
