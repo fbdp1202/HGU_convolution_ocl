@@ -17,8 +17,8 @@ cl_kernel krnl_wgsize_conv = NULL;
 cl_kernel krnl_coalesced_conv = NULL;
 cl_kernel krnl_wgnum_conv = NULL;
 cl_kernel krnl_wgnum_v2_conv = NULL;
-cl_kernel krnl_workload_conv[33] = NULL;
-cl_kernel krnl_fixpoint_conv[33] = NULL;
+cl_kernel krnl_workload_conv[33] = {NULL,};
+cl_kernel krnl_fixpoint_conv[33] = {NULL,};
 
 // cl_mem clGetMem_d_a() { return d_a; }
 // cl_mem* clGetpMem_d_a() { return &d_a; }
@@ -320,33 +320,39 @@ void clKernelSetup(const char *krnl_file)
 	}
 // -----------------------------------------------------------------------------------------------------------------------//
 	if (!strcmp(krnl_file, "./ocl/workload_conv.cl")) {
+		krnl_workload_conv[1] = clCreateKernel(program, "workload1_convolution", &err);
+		if (err != CL_SUCCESS) {
+			printf("Error: Failed to create kernel for workload1_convolution: %s\n", clGetErrorString(err));
+			exit(EXIT_FAILURE);
+		}
+
 		krnl_workload_conv[2] = clCreateKernel(program, "workload2_convolution", &err);
 		if (err != CL_SUCCESS) {
-			printf("Error: Failed to create kernel for coalesced_convolution: %s\n", clGetErrorString(err));
+			printf("Error: Failed to create kernel for workload2_convolution: %s\n", clGetErrorString(err));
 			exit(EXIT_FAILURE);
 		}
 
 		krnl_workload_conv[4] = clCreateKernel(program, "workload4_convolution", &err);
 		if (err != CL_SUCCESS) {
-			printf("Error: Failed to create kernel for coalesced_convolution: %s\n", clGetErrorString(err));
+			printf("Error: Failed to create kernel for workload4_convolution: %s\n", clGetErrorString(err));
 			exit(EXIT_FAILURE);
 		}
 
 		krnl_workload_conv[8] = clCreateKernel(program, "workload8_convolution", &err);
 		if (err != CL_SUCCESS) {
-			printf("Error: Failed to create kernel for coalesced_convolution: %s\n", clGetErrorString(err));
+			printf("Error: Failed to create kernel for workload8_convolution: %s\n", clGetErrorString(err));
 			exit(EXIT_FAILURE);
 		}
 
 		krnl_workload_conv[16] = clCreateKernel(program, "workload16_convolution", &err);
 		if (err != CL_SUCCESS) {
-			printf("Error: Failed to create kernel for coalesced_convolution: %s\n", clGetErrorString(err));
+			printf("Error: Failed to create kernel for workload16_convolution: %s\n", clGetErrorString(err));
 			exit(EXIT_FAILURE);
 		}
 
 		krnl_workload_conv[32] = clCreateKernel(program, "workload32_convolution", &err);
 		if (err != CL_SUCCESS) {
-			printf("Error: Failed to create kernel for coalesced_convolution: %s\n", clGetErrorString(err));
+			printf("Error: Failed to create kernel for workload32_convolution: %s\n", clGetErrorString(err));
 			exit(EXIT_FAILURE);
 		}
 	}

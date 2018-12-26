@@ -43,7 +43,6 @@ void load_convolution_config(layer *pl) {
 	fscanf(fp, " %d", &pl->w);
 	pl->h = pl->w;
 	fscanf(fp, " %d", &pl->size);
-	fscanf(fp, " %d", &pl->workload);
 	pl->stride = 1;
 	pl->pad = 1;
 	pl->out_h = pl->out_w = (pl->w + 2*pl->pad - pl->size + 1)/pl->stride;
@@ -116,7 +115,8 @@ void cpu_image_convolution(layer *pl, float *inputs) {
 }
 
 void cal_convolution(layer *pl, float *inputs, int flag) {
-	int i;
+	int i, w;
+	int workload[6] = {1, 2, 4, 8, 16, 32};
 	int num_cycle = 0;
 	while (num_cycle<=0) {
 		printf("Number of repeat: ");
@@ -131,12 +131,23 @@ void cal_convolution(layer *pl, float *inputs, int flag) {
 #ifdef OPENCL
 	printf("GPU image convolution\n");
 	init_ocl_convolution(pl, inputs);
-
-	double start_gpu_time = what_time_is_it_now();
-	for (i=0; i<num_cycle; i++) {
-		gpu_image_convolution(pl, inputs, flag);
+	if (flag == 8 || flag == 9) {
+		for (w=0; w<6; w++) {
+			pl->workload = workload[w];
+			double start_gpu_time = what_time_is_it_now();
+			for (i=0; i<num_cycle; i++) {
+				gpu_image_convolution(pl, inputs, flag);
+			}
+			printf("Workload %d, GPU image convolution Time: %f seconds\n", pl->workload, (what_time_is_it_now()-start_gpu_time)/num_cycle);
+		}
 	}
-	printf("GPU image convolution Time: %f seconds\n", (what_time_is_it_now()-start_gpu_time)/num_cycle);
+	else {
+		double start_gpu_time = what_time_is_it_now();
+		for (i=0; i<num_cycle; i++) {
+			gpu_image_convolution(pl, inputs, flag);
+		}
+		printf("GPU image convolution Time: %f seconds\n", (what_time_is_it_now()-start_gpu_time)/num_cycle);
+	}
 #endif //OPENCL
 }
 
