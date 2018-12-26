@@ -1,6 +1,8 @@
+OPENCL=1
+
 VPATH\=./src/
 EXEC=HGUConvolution
-OBJDIR=./obj/
+OBJDIR= ./obj/
 
 .SUFFIXES= .o .c
 
@@ -12,7 +14,8 @@ COMMON= -Iinclude/ -Isrc/
 CFLAGS= -Wall -Wno-unknown-pragmas -Wfatal-errors -fPIC
 
 #OBJ= convolution.o layer.o
-EXECOBJA = main.o convolution.o layer.o
+EXECOBJA = convolution.o define_cl.o image.o layer.o main.o utils.o convolution_ocl.o
+EXECOBJ = $(addprefix $(OBJDIR), $(EXECOBJA))
 
 ifeq ($(OPENCL), 1)
 COMMON+= -DOPENCL
@@ -22,18 +25,16 @@ endif # OPENCL
 
 CFLAGS+=$(OPTS)
 
-EXECOBJ = $(addprefix $(OBJDIR), $(EXECOBJA))
-DEPS = $(wildcard include/*.h) Makefile $(wildcard src/*.c)
+SRCS = ./src/
+DEPS = $(wildcard include/*.h) Makefile
 
 all: obj results $(SLIB) $(EXEC)
 
-$(EXEC): $(EXECOBJA)
-	$(CC) $(COMMON) $(CFLAGS) $^ -o $@ $(LDFLAGS)
-	echo "$@ depends on EXECOBJ"
+$(EXEC): $(EXECOBJ)
+	$(CC) $(COMMON) $(CFLAGS) $^ -o $@ $(LDFLAGS) 
 
-%.o: %.c $(DEPS)
+$(OBJDIR)%.o: $(SRCS)%.c $(DEPS)
 	$(CC) $(COMMON) $(CFLAGS) -c $< -o $@
-	echo "$@ depends on DEPS"
 
 obj:
 	mkdir -p obj
@@ -45,4 +46,4 @@ results:
 .PHONY: clean
 
 clean:
-	rm -rf $(OBJS) $(EXEC) $(EXECOBJ)
+	rm -rf $(EXEC) $(EXECOBJ)

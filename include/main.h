@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "define_cl.h"
+
 typedef struct layer{
 	int k;
 	int c;
@@ -16,6 +18,11 @@ typedef struct layer{
 	int size;
 	float *weights;
 	float *outputs;
+#ifdef OPENCL
+	cl_mem mo_inputs;
+	cl_mem mo_weights;
+	cl_mem mo_outputs;
+#endif //OPENCL
 }layer;
 
 

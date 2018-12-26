@@ -2,14 +2,14 @@
 #include <stdlib.h>
 #include "image.h"
 
-unsigned char* make_random_input(int input_size) {
-	unsigned char* inputs = (unsigned char* )calloc(size, size(unsigned char))
+void set_random_input(unsigned char *inputs, int input_size) {
 	int i;
-	for (i=0; i<inputs; i++)
+	for (i=0; i<input_size; i++)
 		inputs[i] = (unsigned char)(rand()%256);
-	return inputs;
 }
 
-void delete_input(unsigned char* inputs) {
-	free(inputs);
+void copy_input(unsigned char *src, float *dst, int input_size){
+	int i;
+	for (i=0; i<input_size; i++)
+		dst[i] = src[i]/255.f;
 }
