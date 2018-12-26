@@ -17,8 +17,8 @@ cl_kernel krnl_wgsize_conv = NULL;
 cl_kernel krnl_coalesced_conv = NULL;
 cl_kernel krnl_wgnum_conv = NULL;
 cl_kernel krnl_wgnum_v2_conv = NULL;
-cl_kernel krnl_workload_conv = NULL;
-cl_kernel krnl_fixpoint_conv = NULL;
+cl_kernel krnl_workload_conv[33] = NULL;
+cl_kernel krnl_fixpoint_conv[33] = NULL;
 
 // cl_mem clGetMem_d_a() { return d_a; }
 // cl_mem* clGetpMem_d_a() { return &d_a; }
@@ -30,8 +30,8 @@ cl_kernel clGetkrnl_wgsize_conv() { return krnl_wgsize_conv; }
 cl_kernel clGetkrnl_coalesced_conv() { return krnl_coalesced_conv; }
 cl_kernel clGetkrnl_wgnum_conv() { return krnl_wgnum_v2_conv; }
 cl_kernel clGetkrnl_wgnum_v2_conv() { return krnl_wgnum_v2_conv; }
-cl_kernel clGetkrnl_workload_conv() { return krnl_workload_conv; }
-cl_kernel clGetkrnl_fixpoint_conv() { return krnl_fixpoint_conv; }
+cl_kernel clGetkrnl_workload_conv(int workload) { return krnl_workload_conv[workload]; }
+cl_kernel clGetkrnl_fixpoint_conv(int workload) { return krnl_fixpoint_conv[workload]; }
 
 
 
@@ -320,7 +320,31 @@ void clKernelSetup(const char *krnl_file)
 	}
 // -----------------------------------------------------------------------------------------------------------------------//
 	if (!strcmp(krnl_file, "./ocl/workload_conv.cl")) {
-		krnl_workload_conv = clCreateKernel(program, "workload_convolution", &err);
+		krnl_workload_conv[2] = clCreateKernel(program, "workload2_convolution", &err);
+		if (err != CL_SUCCESS) {
+			printf("Error: Failed to create kernel for coalesced_convolution: %s\n", clGetErrorString(err));
+			exit(EXIT_FAILURE);
+		}
+
+		krnl_workload_conv[4] = clCreateKernel(program, "workload4_convolution", &err);
+		if (err != CL_SUCCESS) {
+			printf("Error: Failed to create kernel for coalesced_convolution: %s\n", clGetErrorString(err));
+			exit(EXIT_FAILURE);
+		}
+
+		krnl_workload_conv[8] = clCreateKernel(program, "workload8_convolution", &err);
+		if (err != CL_SUCCESS) {
+			printf("Error: Failed to create kernel for coalesced_convolution: %s\n", clGetErrorString(err));
+			exit(EXIT_FAILURE);
+		}
+
+		krnl_workload_conv[16] = clCreateKernel(program, "workload16_convolution", &err);
+		if (err != CL_SUCCESS) {
+			printf("Error: Failed to create kernel for coalesced_convolution: %s\n", clGetErrorString(err));
+			exit(EXIT_FAILURE);
+		}
+
+		krnl_workload_conv[32] = clCreateKernel(program, "workload32_convolution", &err);
 		if (err != CL_SUCCESS) {
 			printf("Error: Failed to create kernel for coalesced_convolution: %s\n", clGetErrorString(err));
 			exit(EXIT_FAILURE);
@@ -328,7 +352,31 @@ void clKernelSetup(const char *krnl_file)
 	}
 // -----------------------------------------------------------------------------------------------------------------------//
 	if (!strcmp(krnl_file, "./ocl/fixpoint_conv.cl")) {
-		krnl_fixpoint_conv = clCreateKernel(program, "fixpoint_convolution", &err);
+		krnl_fixpoint_conv[2] = clCreateKernel(program, "fixpoint2_convolution", &err);
+		if (err != CL_SUCCESS) {
+			printf("Error: Failed to create kernel for coalesced_convolution: %s\n", clGetErrorString(err));
+			exit(EXIT_FAILURE);
+		}
+
+		krnl_fixpoint_conv[4] = clCreateKernel(program, "fixpoint4_convolution", &err);
+		if (err != CL_SUCCESS) {
+			printf("Error: Failed to create kernel for coalesced_convolution: %s\n", clGetErrorString(err));
+			exit(EXIT_FAILURE);
+		}
+
+		krnl_fixpoint_conv[8] = clCreateKernel(program, "fixpoint8_convolution", &err);
+		if (err != CL_SUCCESS) {
+			printf("Error: Failed to create kernel for coalesced_convolution: %s\n", clGetErrorString(err));
+			exit(EXIT_FAILURE);
+		}
+
+		krnl_fixpoint_conv[16] = clCreateKernel(program, "fixpoint16_convolution", &err);
+		if (err != CL_SUCCESS) {
+			printf("Error: Failed to create kernel for coalesced_convolution: %s\n", clGetErrorString(err));
+			exit(EXIT_FAILURE);
+		}
+
+		krnl_fixpoint_conv[32] = clCreateKernel(program, "fixpoint32_convolution", &err);
 		if (err != CL_SUCCESS) {
 			printf("Error: Failed to create kernel for coalesced_convolution: %s\n", clGetErrorString(err));
 			exit(EXIT_FAILURE);

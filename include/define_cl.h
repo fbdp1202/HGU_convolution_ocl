@@ -25,7 +25,7 @@ cl_kernel clGetkrnl_wgsize_conv();
 cl_kernel clGetkrnl_coalesced_conv();
 cl_kernel clGetkrnl_wgnum_conv();
 cl_kernel clGetkrnl_wgnum_v2_conv();
-cl_kernel clGetkrnl_workload_conv();
+cl_kernel clGetkrnl_workload_conv(int workload);
 cl_kernel clGetkrnl_fixpoint_conv();
 
 void clSetup();

@@ -43,6 +43,7 @@ void load_convolution_config(layer *pl) {
 	fscanf(fp, " %d", &pl->w);
 	pl->h = pl->w;
 	fscanf(fp, " %d", &pl->size);
+	fscanf(fp, " %d", &pl->workload);
 	pl->stride = 1;
 	pl->pad = 1;
 	pl->out_h = pl->out_w = (pl->w + 2*pl->pad - pl->size + 1)/pl->stride;
@@ -142,6 +143,9 @@ void cal_convolution(layer *pl, float *inputs, int flag) {
 void delete_convolution(layer *pl) {
 	if (pl->weights) free(pl->weights);
 	if (pl->outputs) free(pl->outputs);
+#ifdef OPENCL
+	free_ocl(pl);
+#endif // OPENCL
 }
 
 void test_convolution() {

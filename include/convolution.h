@@ -7,6 +7,7 @@ void test_convolution();
 
 #ifdef OPENCL
 void init_ocl_convolution(layer *pl, float *inputs);
+void free_ocl(layer *pl);
 void gpu_image_convolution(layer *pl, float *inputs, int flag);
 #endif // OPENCL
 

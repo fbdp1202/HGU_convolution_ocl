@@ -19,6 +19,10 @@ typedef struct layer{
 	float *weights;
 	float *outputs;
 #ifdef OPENCL
+	int workload;
+	cl_mem mo_pad_inputs;
+	cl_mem mo_fixed_weights;
+
 	cl_mem mo_inputs;
 	cl_mem mo_weights;
 	cl_mem mo_outputs;
